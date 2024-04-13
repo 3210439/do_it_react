@@ -1,29 +1,40 @@
-import {useCallback} from 'react'
-import {useDispatch} from 'react-redux'
+import {useMemo} from 'react'
+import {DragDropContext} from 'react-beautiful-dnd'
 import {Title} from '../../components'
 import CreateListForm from './CreateListForm'
+import BoardList from '../BoardList'
+import {ListDroppable} from '../../components'
 
-import * as LO from '../../store/listidOrders'
-import * as L from '../../store/listEntities'
+import {useLists} from '../../store/useLists'
 
 export default function Board() {
-  const dispatch = useDispatch()
+  const {lists, onRemoveList, onCreateList, onMoveList, onDragEnd} = useLists()
 
-  const onCreateList = useCallback(
-    (uuid: string, title: string) => {
-      const list = {uuid, title}
-      dispatch(LO.addListidToOrders(list.uuid))
-      dispatch(L.addList(list))
-      console.log('onCreateList', uuid, title)
-    },
-    [dispatch]
+  const children = useMemo(
+    () =>
+      lists.map((list, index) => (
+        <BoardList
+          key={list.uuid}
+          list={list}
+          onRemoveList={onRemoveList(list.uuid)}
+          index={index}
+          onMoveList={onMoveList}
+        />
+      )),
+    [lists, onRemoveList, onMoveList]
   )
+
   return (
     <section className="mt-4">
       <Title>Board</Title>
-      <div className="mt-4">
-        <CreateListForm onCreateList={onCreateList} />
-      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <ListDroppable className="flex flex-row p-2 mt-4">
+          <div className="flex flex-wrap p-2 mt-4">
+            {children}
+            <CreateListForm onCreateList={onCreateList} />
+          </div>
+        </ListDroppable>
+      </DragDropContext>
     </section>
   )
 }
