@@ -30,7 +30,7 @@ const BoardList: FC<BoardListProps> = ({
   const navigate = useNavigate()
   const cardClicked = useCallback(
     (cardid: string) => () => {
-      navigate('/board/card/${cardid}')
+      navigate(`/board/card/${cardid}`)
     },
     [navigate]
   )
