@@ -11,7 +11,7 @@ const connectCallback = (db: MongoDB) => {
   const hostname = 'localhost',
     port = 4000
 
-  createServer(createExpressApp()).listen(port, () =>
+  createServer(createExpressApp(db)).listen(port, () =>
     console.log(`connect http://${hostname}:${port}`)
   )
 }

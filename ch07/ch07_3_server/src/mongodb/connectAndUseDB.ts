@@ -6,7 +6,7 @@ export type ConnectCallback = (db: MongoDB) => void
 export const connectAndUseDB = async (
   callback: ConnectCallback,
   dbName: string,
-  mongoUrl: string = 'mongodb://localhost:27017'
+  mongoUrl: string = 'mongodb://127.0.0.1:27017'
 ) => {
   let connection
   try {
