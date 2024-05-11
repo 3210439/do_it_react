@@ -1,15 +1,18 @@
-import {useState, useCallback} from 'react'
-import {del} from '../../server'
+import { useState, useCallback } from "react";
+import { del } from "../../server";
+import { useAuth } from "../../contexts";
 
 export default function DelTest() {
-  const [data, setData] = useState<object>({})
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [data, setData] = useState<object>({});
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { jwt } = useAuth();
+
   const deleteTest = useCallback(() => {
-    del('/test/1234')
-      .then(res => res.json())
-      .then(data => setData(data))
-      .catch(error => setErrorMessage(error.message))
-  }, [])
+    del("/test/1234", jwt)
+      .then((res) => res.json())
+      .then((data) => setData(data))
+      .catch((error) => setErrorMessage(error.message));
+  }, []);
 
   return (
     <div className="mt-4 mb-4">
@@ -23,5 +26,5 @@ export default function DelTest() {
         {errorMessage && <p>error: {errorMessage}</p>}
       </div>
     </div>
-  )
+  );
 }

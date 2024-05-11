@@ -1,22 +1,24 @@
-import {useState, useCallback} from 'react'
-import {get} from '../../server'
+import { useState, useCallback } from "react";
+import { get } from "../../server";
+import { useAuth } from "../../contexts";
 
 export default function GetTest() {
-  const [data, setData] = useState<object>({})
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [data, setData] = useState<object>({});
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { jwt } = useAuth();
 
   const getAllTest = useCallback(() => {
-    get('/test')
-      .then(res => res.json())
-      .then(data => setData(data))
-      .catch(error => setErrorMessage(error.message))
-  }, [])
+    get("/test", jwt)
+      .then((res) => res.json())
+      .then((data) => setData(data))
+      .catch((error) => setErrorMessage(error.message));
+  }, []);
   const getTest = useCallback(() => {
-    get('/test/1234')
-      .then(res => res.json())
-      .then(data => setData(data))
-      .catch(error => setErrorMessage(error.message))
-  }, [])
+    get("/test/1234", jwt)
+      .then((res) => res.json())
+      .then((data) => setData(data))
+      .catch((error) => setErrorMessage(error.message));
+  }, []);
 
   return (
     <div className="mb-4">
@@ -33,5 +35,5 @@ export default function GetTest() {
         {errorMessage && <p>error: {errorMessage}</p>}
       </div>
     </div>
-  )
+  );
 }

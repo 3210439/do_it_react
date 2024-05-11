@@ -1,22 +1,25 @@
-import {useState, useCallback} from 'react'
-import {put} from '../../server'
-import * as D from '../../data'
+import { useState, useCallback } from "react";
+import { put } from "../../server";
+import * as D from "../../data";
+import { useAuth } from "../../contexts";
 
-type Body = Record<'id' | string, any>
+type Body = Record<"id" | string, any>;
 type Data = {
-  ok: boolean
-  body?: Body
-  errorMessage?: string
-}
+  ok: boolean;
+  body?: Body;
+  errorMessage?: string;
+};
 export default function PutTest() {
-  const [data, setData] = useState<Data | null>(null)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [data, setData] = useState<Data | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { jwt } = useAuth();
+
   const putTest = useCallback(() => {
-    put('/test/1234', D.makeRandomCard())
-      .then(res => res.json())
-      .then(data => setData(data))
-      .catch(error => setErrorMessage(error.message))
-  }, [])
+    put("/test/1234", D.makeRandomCard(), jwt)
+      .then((res) => res.json())
+      .then((data) => setData(data))
+      .catch((error) => setErrorMessage(error.message));
+  }, []);
 
   return (
     <div className="mb-4">
@@ -31,5 +34,5 @@ export default function PutTest() {
         {errorMessage && <p>error: {errorMessage}</p>}
       </div>
     </div>
-  )
+  );
 }

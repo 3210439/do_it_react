@@ -1,17 +1,19 @@
-import {useState, useCallback} from 'react'
-import {post} from '../../server'
-import * as D from '../../data'
+import { useState, useCallback } from "react";
+import { post } from "../../server";
+import * as D from "../../data";
+import { useAuth } from "../../contexts";
 
 export default function PostTest() {
-  const [data, setData] = useState<object>({})
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const { jwt } = useAuth();
+  const [data, setData] = useState<object>({});
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const postTest = useCallback(() => {
-    post('/test', D.makeRandomCard())
-      .then(res => res.json())
-      .then(data => setData(data))
-      .catch(error => setErrorMessage(error.message))
-  }, [])
+    post("/test", D.makeRandomCard(), jwt)
+      .then((res) => res.json())
+      .then((data) => setData(data))
+      .catch((error) => setErrorMessage(error.message));
+  }, [jwt]);
 
   return (
     <div className="mb-4">
@@ -25,5 +27,5 @@ export default function PostTest() {
         {errorMessage && <p>error: {errorMessage}</p>}
       </div>
     </div>
-  )
+  );
 }

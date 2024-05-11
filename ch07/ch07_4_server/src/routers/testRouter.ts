@@ -1,5 +1,6 @@
 import type {MongoDB} from '../mongodb'
 import {Router} from 'express'
+import {getUserIdFromJwtP} from './getUserIdFromJwtP'
 
 export const testRouter = (...args: any[]) => {
   const db: MongoDB = args[0]
@@ -8,6 +9,7 @@ export const testRouter = (...args: any[]) => {
   return router
     .get('/', async (req, res) => {
       try {
+        const userId = await getUserIdFromJwtP(req)
         const findResult = await test.find({}).toArray()
         res.json({ok: true, body: findResult})
       } catch (e) {
@@ -17,6 +19,7 @@ export const testRouter = (...args: any[]) => {
     .get('/:id', async (req, res) => {
       const {id} = req.params
       try {
+        const userId = await getUserIdFromJwtP(req)
         const findResult = await test.findOne({id})
         res.json({ok: true, body: findResult})
       } catch (e) {
@@ -27,6 +30,7 @@ export const testRouter = (...args: any[]) => {
       // req.body의 데이터를 서버에 저장하기를 요청하는 경우
       const {body} = req
       try {
+        const userId = await getUserIdFromJwtP(req)
         try {
           await test.drop() // 항상 id: '1234'인 문서가 단 하나만 있도록
         } catch (e) {
@@ -47,6 +51,7 @@ export const testRouter = (...args: any[]) => {
       const {id} = req.params
       const {body} = req
       try {
+        const userId = await getUserIdFromJwtP(req)
         const updateResult = await test.findOneAndUpdate(
           {id},
           {$set: body},
@@ -63,6 +68,7 @@ export const testRouter = (...args: any[]) => {
       // id 값을 가진 데이터의 삭제를 요청하는 경우
       const {id} = req.params
       try {
+        const userId = await getUserIdFromJwtP(req)
         await test.deleteOne({id})
         res.json({ok: true})
       } catch (e) {

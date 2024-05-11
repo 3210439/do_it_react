@@ -21,7 +21,7 @@ export const authRouter = (...args: any[]) => {
         } else {
           const {email, password} = body
           const hashed = await U.hashPasswordP(password)
-          const newBody = {email, pasword: hashed}
+          const newBody = {email, password: hashed}
           const {insertedId} = await user.insertOne(newBody)
           const jwt = await U.jwtSignP({userId: insertedId})
 
@@ -51,6 +51,8 @@ export const authRouter = (...args: any[]) => {
           }
 
           const {email, password} = req.body
+          console.log('result.password : ' + result.password)
+          console.log('result.email : ' + result.email)
           if (email !== result.email) {
             res.json({ok: false, errorMessage: '이메일 주소가 틀립니다.'})
             return

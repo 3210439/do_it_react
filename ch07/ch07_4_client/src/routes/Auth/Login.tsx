@@ -1,50 +1,51 @@
-import type {ChangeEvent} from 'react'
-import {useState, useCallback, useEffect} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
-import {useAuth} from '../../contexts'
-import * as U from '../../utils'
+import type { ChangeEvent } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts";
+import * as U from "../../utils";
 
-type LoginFormType = Record<'email' | 'password', string>
-const initialFormState = {email: '', password: ''}
+type LoginFormType = Record<"email" | "password", string>;
+const initialFormState = { email: "", password: "" };
 
 export default function Login() {
-  const [{email, password}, setForm] = useState<LoginFormType>(initialFormState)
+  const [{ email, password }, setForm] =
+    useState<LoginFormType>(initialFormState);
   const changed = useCallback(
     (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
-      setForm(obj => ({...obj, [key]: e.target.value}))
+      setForm((obj) => ({ ...obj, [key]: e.target.value }));
     },
     []
-  )
+  );
 
-  const navigate = useNavigate()
-  const {login} = useAuth()
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const loginAccount = useCallback(() => {
-    login(email, password, () => navigate('/'))
-  }, [email, password, navigate, login])
+    login(email, password, () => navigate("/"));
+  }, [email, password, navigate, login]);
 
   useEffect(() => {
-    U.readObjectP<LoginFormType>('user')
-      .then(user => {
-        if (user) setForm(user)
+    U.readObjectP<LoginFormType>("user")
+      .then((user) => {
+        if (user) setForm(user);
       })
-      .catch(e => {
+      .catch((e) => {
         /* 오류 무시 */
-      })
-  }, [])
+      });
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 border border-gray-300 shadow-xl rounded-xl">
       <div className="flex flex-col items-center flex-1 max-w-sm px-2 mx-auto jsutify-center">
         <div className="w-full px-6 py-8 text-black bg-white rounded shadow-md">
-          <h1 className="mb-8 text-2xl text-center text-primary">Sign Up</h1>
+          <h1 className="mb-8 text-2xl text-center text-primary">LOGIN</h1>
           <input
             type="text"
             className="w-full p-3 mb-4 input input-primary"
             name="email"
             placeholder="Email"
             value={email}
-            onChange={changed('email')}
+            onChange={changed("email")}
           />
           <input
             type="password"
@@ -52,9 +53,13 @@ export default function Login() {
             name="password"
             placeholder="Password"
             value={password}
-            onChange={changed('password')}
+            onChange={changed("password")}
           />
-          <button type="submit" className="w-full btn btn-primary" onClick={loginAccount}>
+          <button
+            type="submit"
+            className="w-full btn btn-primary"
+            onClick={loginAccount}
+          >
             LOGIN
           </button>
         </div>
@@ -67,5 +72,5 @@ export default function Login() {
         </div>
       </div>
     </div>
-  )
+  );
 }

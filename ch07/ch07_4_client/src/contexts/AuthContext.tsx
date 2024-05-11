@@ -13,6 +13,8 @@ export type LoggedUser = { email: string; password: string };
 type Callback = () => void;
 
 type ContextType = {
+  jwt?: string;
+  errorMessaage?: string;
   loggedUser?: LoggedUser;
   signup: (email: string, password: string, callback?: Callback) => void;
   login: (email: string, password: string, callback?: Callback) => void;

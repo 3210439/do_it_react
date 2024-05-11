@@ -15,6 +15,8 @@ export const hashPasswordP = (password: string) =>
 export const comparePasswordP = (password: string, hashedPassword: string) =>
   new Promise<boolean>(async (resolve, reject) => {
     try {
+      console.log('password :' + password)
+      console.log('hashedPassword :' + hashedPassword)
       const result = await bcrypt.compare(password, hashedPassword)
       resolve(result) // 비밀번호가 같으면 true
     } catch (e) {
